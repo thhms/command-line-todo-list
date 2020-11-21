@@ -92,7 +92,7 @@ div[id^="note"] {
 
 @media screen and (max-width:740px) {
     #main, #in_div {
-        min-width: 300px;
+        min-width: 0px;
         width: 90%;
         left: 5%
     }
