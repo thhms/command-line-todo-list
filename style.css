@@ -97,7 +97,7 @@ div[id^="note"] {
         left: 5%
     }
     #in {
-        min-width: 300px;
+        min-width: 0px;
     }    
    
 }
