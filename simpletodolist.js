@@ -28,14 +28,18 @@ function init() {
 }
 
 function drawMain() {
-    var s = "";
+    var s = "<table>";
     for (i in data.notes) {
         if (data.notes[i] == "") { continue; }
-        s += "<div id='note" + i + "' class='status"+data.status[i]+"'>"+i+": " + data.notes[i];
-        //s += "<div class='button' onclick='deleteNote("+i+")'></div>";
-        s += "</div>";
+        s += "<tr id='note" + i + "'>"+
+            // "<span class='status"+data.status[i]+"'>" + i + "</span>"+
+            "<td><span class='status"+data.status[i]+"'>" + i + ":</span></td>"+
+            "<td><div class='status"+data.status[i]+"'>" + data.notes[i] + "</div></td>"+
+            "</tr>";
     }
+    s += "</table>"
     main.innerHTML = s;
+    addMouseFunctionality();
 }
 
 
@@ -73,7 +77,8 @@ function doneWithNote() {
         data.status[i] = 2;
     }
     id = "note" + i;
-    document.getElementById(id).className = "status" + data.status[i];
+    document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
+    document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
     input.value = "";
 }
 
@@ -88,7 +93,8 @@ function prioritiseNote() {
         data.status[i] = 0;
     }
     id = "note" + i;
-    document.getElementById(id).className = "status" + data.status[i];
+    document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
+    document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
     input.value = "";
 }
 
@@ -110,14 +116,6 @@ function swapNotes() {
     input.value = "";
 }
 
-// function statusChange(i) {
-//     data.status[i]++;
-//     if (data.status[i] > 2) { data.status[i] = 0; }
-//     // drawMain();
-//     id = "note" + i;
-//     document.getElementById(id).className = "status" + data.status[i];
-// }
-
 function deleteNote() {
     // validity check
     if (isNaN(command_array[1]) == true) { return; }
@@ -135,4 +133,23 @@ function clearData() {
     }
     drawMain();
     input.value = "";
+}
+
+
+// MOUSE/TOUCH FUNCTIONALITY
+
+function addMouseFunctionality() {
+    for (i in main.querySelectorAll("tr")) {
+        main.querySelectorAll("tr")[i].onclick = function () { 
+            x = this.id;
+            statusChange(x[4]); }
+    }
+}
+
+function statusChange(i) {
+    data.status[i]++;
+    if (data.status[i] > 2) { data.status[i] = 0; }
+    id = "note" + i;
+    document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
+    document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
 }
