@@ -64,6 +64,7 @@ function newNote() {
     data.status.push(0);
     drawMain();
     input.value = "";
+    main.scrollTop = main.scrollTopMax;
 }
 
 function doneWithNote() {
@@ -139,17 +140,27 @@ function clearData() {
 // MOUSE/TOUCH FUNCTIONALITY
 
 function addMouseFunctionality() {
-    for (i in main.querySelectorAll("tr")) {
-        main.querySelectorAll("tr")[i].onclick = function () { 
-            x = this.id;
-            statusChange(x[4]); }
+    for (i=0; i<data.notes.length; i++) {
+        document.getElementById("note"+i).children[0].onclick = function () { 
+            statusChange(this.parentElement.id.split("note")[1],1); 
+        }
+        document.getElementById("note"+i).children[1].onclick = function () { 
+            statusChange(this.parentElement.id.split("note")[1],2); 
+        }
     }
 }
 
-function statusChange(i) {
-    data.status[i]++;
-    if (data.status[i] > 2) { data.status[i] = 0; }
+function statusChange(i,s) {
+    if (data.status[i] == s) {
+        data.status[i] = 0;
+    } else {
+        data.status[i] = s;
+    }
     id = "note" + i;
+    console.log(id)
     document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
     document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
 }
+
+// die funktionalität aufteilen: td[0] = prio & td[1] = done
+// main.querySelectorAll("tr")[0].querySelectorAll("td")[0].onclick = function () { console.log("yo"); }
