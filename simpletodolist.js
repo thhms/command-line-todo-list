@@ -51,11 +51,13 @@ function cmdInput() {
         return;
     }
     command_array = input.value.split(" ");
-    if (command_array[0] == "done") { doneWithNote(); return; }
-    if (command_array[0] == "swap") { swapNotes(); return; }
-    if (command_array[0] == "del") { deleteNote(); return; }
-    if (command_array[0] == "prio") { prioritiseNote(); return; }
-    if (command_array[0] == "clear") { clearData(); return; }
+    if (command_array[0].toLowerCase() == "done") { doneWithNote(); return; }
+    if (command_array[0].toLowerCase() == "swap") { swapNotes(); return; }
+    if (command_array[0].toLowerCase() == "del") { deleteNote(); return; }
+    if (command_array[0].toLowerCase() == "prio") { prioritiseNote(); return; }
+    if (command_array[0].toLowerCase() == "clear") { clearData(); return; }
+    if (command_array[0].toLowerCase() == "save") { saveData(); return; }
+    if (command_array[0].toLowerCase() == "load") { loadData(); return; }
     newNote();
 }
 
@@ -134,6 +136,46 @@ function clearData() {
     }
     drawMain();
     input.value = "";
+}
+
+function saveData() {
+    saveStr = "";
+    for (i in data.notes) {
+        saveStr += data.notes[i] + ",$" + data.status[i];
+        if (i < data.notes.length-1) {
+            saveStr += ",$";
+        }
+    }
+    input.value = saveStr;
+    input.select();
+}
+
+function loadData() {
+    loadStr = input.value;
+
+    // if there are multiple "load " in the string & eliminate initial "load "
+    loadStrTemp = "";
+    for (i in loadStr) {
+        if (i>4) {
+        loadStrTemp += loadStr[i];
+        }
+    }
+    loadStr = loadStrTemp;
+    loadStr = loadStr.split(",$");
+    
+    if (loadStr.length <= 1) {
+        data.notes.push("LOAD DATA INVALID");
+        data.status.push(0);
+        drawMain();
+    } else {
+        clearData();
+        for (i=0;i<loadStr.length;i+=2) {
+            data.notes[i/2] = loadStr[i];
+            data.status[i/2] = loadStr[i+1]
+        }
+        drawMain();
+        input.value = "";
+    }
 }
 
 
