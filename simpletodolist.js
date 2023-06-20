@@ -1,18 +1,19 @@
+"use strict";
+
 // DATA & SETUP & DRAWING
 
-data = { 
+var data = { 
     "notes": [],
     "status": [] 
 }
 
-tutorialData = "{\"notes\":[\"HOW TO USE THIS PROGRAM:\",\"type \\\"done 1\\\"\",\"type \\\"swap 3 4\\\"\",\"type \\\"prio 0\\\"\",\"type \\\"del 2\\\"\",\"type \\\"clear\\\"\"],\"status\":[0,0,0,0,0,0]}";
+const tutorialData = "{\"notes\":[\"HOW TO USE THIS PROGRAM:\",\"type \\\"done 1\\\"\",\"type \\\"swap 3 4\\\"\",\"type \\\"prio 0\\\"\",\"type \\\"del 2\\\"\",\"type \\\"clear\\\"\"],\"status\":[0,0,0,0,0,0]}";
 data = JSON.parse(tutorialData);
 
-window.onload = init;
+var input = document.getElementById('in');
+var main = document.getElementById('main');
 
-function init() {
-    input = document.getElementById('in');
-    main = document.getElementById('main');
+window.onload = () => {
     drawMain();
     input.focus();
     // Event Handler for Keyboard Input
@@ -29,7 +30,7 @@ function init() {
 
 function drawMain() {
     var s = "<table>";
-    for (i in data.notes) {
+    for (var i in data.notes) {
         if (data.notes[i] == "") { continue; }
         s += "<tr id='note" + i + "'>"+
             // "<span class='status"+data.status[i]+"'>" + i + "</span>"+
@@ -44,7 +45,7 @@ function drawMain() {
 
 
 // COMMAND-LINE FUNCTIONALITY
-
+let command_array = [];
 function cmdInput() {
     if (input.value == "") {
         input.focus();
@@ -73,13 +74,13 @@ function doneWithNote() {
     // validity check
     if (isNaN(command_array[1]) == true) { return; }
     // change style
-    i = command_array[1];
+    let i = command_array[1];
     if (data.status[i] == 2) { 
         data.status[i] = 0; 
     } else {
         data.status[i] = 2;
     }
-    id = "note" + i;
+    let id = "note" + i;
     document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
     document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
     input.value = "";
@@ -89,13 +90,13 @@ function prioritiseNote() {
     // validity check
     if (isNaN(command_array[1]) == true) { return; }
     // change style
-    i = command_array[1];
+    let i = command_array[1];
     if (data.status[i] != 1) { 
         data.status[i] = 1; 
     } else {
         data.status[i] = 0;
     }
-    id = "note" + i;
+    let id = "note" + i;
     document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
     document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
     input.value = "";
@@ -139,8 +140,8 @@ function clearData() {
 }
 
 function saveData() {
-    saveStr = "";
-    for (i in data.notes) {
+    let saveStr = "";
+    for (var i in data.notes) {
         saveStr += data.notes[i] + ",$" + data.status[i];
         if (i < data.notes.length-1) {
             saveStr += ",$";
@@ -151,11 +152,11 @@ function saveData() {
 }
 
 function loadData() {
-    loadStr = input.value;
+    let loadStr = input.value;
 
     // if there are multiple "load " in the string & eliminate initial "load "
-    loadStrTemp = "";
-    for (i in loadStr) {
+    let loadStrTemp = "";
+    for (var i in loadStr) {
         if (i>4) {
         loadStrTemp += loadStr[i];
         }
@@ -182,7 +183,7 @@ function loadData() {
 // MOUSE/TOUCH FUNCTIONALITY
 
 function addMouseFunctionality() {
-    for (i=0; i<data.notes.length; i++) {
+    for (var i=0; i<data.notes.length; i++) {
         document.getElementById("note"+i).children[0].onclick = function () { 
             statusChange(this.parentElement.id.split("note")[1],1); 
         }
@@ -198,7 +199,7 @@ function statusChange(i,s) {
     } else {
         data.status[i] = s;
     }
-    id = "note" + i;
+    let id = "note" + i;
     console.log(id)
     document.getElementById(id).getElementsByTagName("div")[0].className = "status" + data.status[i];
     document.getElementById(id).getElementsByTagName("span")[0].className = "status" + data.status[i];
