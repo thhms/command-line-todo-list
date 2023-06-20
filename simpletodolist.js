@@ -7,8 +7,8 @@ var data = {
     "status": [] 
 }
 
-const tutorialData = "{\"notes\":[\"HOW TO USE THIS PROGRAM:\",\"type \\\"done 1\\\"\",\"type \\\"swap 3 4\\\"\",\"type \\\"prio 0\\\"\",\"type \\\"del 2\\\"\",\"type \\\"clear\\\"\"],\"status\":[0,0,0,0,0,0]}";
-data = JSON.parse(tutorialData);
+const tutorialData = "{\"notes\":[\"HOW TO USE THIS PROGRAM:\",\"type \\\"done 1\\\"\",\"type \\\"swap 3 4\\\"\",\"type \\\"prio 0\\\"\",\"type \\\"del 2\\\"\",\"type \\\"something\\\"\",\"type \\\"clear\\\"\"],\"status\":[\"0\",\"0\",\"0\",\"0\",\"0\",0,\"0\"]}";
+data = JSON.parse(tutorialData); // JSON.stringify();
 
 var input = document.getElementById('in');
 var main = document.getElementById('main');
@@ -156,7 +156,7 @@ function loadData() {
 
     // if there are multiple "load " in the string & eliminate initial "load "
     let loadStrTemp = "";
-    for (var i in loadStr) {
+    for (var i in loadStr) {    // There must be an easier way to cut the first 5 chars from a string
         if (i>4) {
         loadStrTemp += loadStr[i];
         }
