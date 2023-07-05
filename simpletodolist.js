@@ -8,7 +8,7 @@ var data = {
 }
 
 const tutorialData = "{\"notes\":[\"HOW TO USE THIS PROGRAM:\",\"type \\\"done 1\\\"\",\"type \\\"swap 3 4\\\"\",\"type \\\"prio 0\\\"\",\"type \\\"del 2\\\"\",\"type \\\"something\\\"\",\"type \\\"clear\\\"\"],\"status\":[\"0\",\"0\",\"0\",\"0\",\"0\",0,\"0\"]}";
-data = JSON.parse(tutorialData); // JSON.stringify();
+data = JSON.parse(tutorialData);
 
 var input = document.getElementById('in');
 var main = document.getElementById('main');
@@ -122,10 +122,24 @@ function swapNotes() {
 
 function deleteNote() {
     // validity check
-    if (isNaN(command_array[1]) == true) { return; }
+    if (isNaN(command_array[1]) == true && command_array[1] != "done") { return; }
     // delete
-    data.notes.splice(command_array[1],1);
-    data.status.splice(command_array[1],1);
+    if (command_array[1] == "done") {
+        let doneIndexes = [];
+        for (var i in data.notes) {
+            if (data.status[i] == 2) {
+                doneIndexes.push(i);
+            }
+        }
+        doneIndexes.reverse();
+        for (var i in doneIndexes) {
+            data.notes.splice(doneIndexes[i],1);
+            data.status.splice(doneIndexes[i],1);
+        }
+    } else {
+        data.notes.splice(command_array[1],1);
+        data.status.splice(command_array[1],1);
+    }
     drawMain();
     input.value = "";
 }
@@ -155,13 +169,14 @@ function loadData() {
     let loadStr = input.value;
 
     // if there are multiple "load " in the string & eliminate initial "load "
-    let loadStrTemp = "";
-    for (var i in loadStr) {    // There must be an easier way to cut the first 5 chars from a string
-        if (i>4) {
-        loadStrTemp += loadStr[i];
-        }
-    }
-    loadStr = loadStrTemp;
+    loadStr = loadStr.slice(5);
+        // let loadStrTemp = "";
+        // for (var i in loadStr) {    // There must be an easier way to cut the first 5 chars from a string
+        //     if (i>4) {
+        //     loadStrTemp += loadStr[i];
+        //     }
+        // }
+        // loadStr = loadStrTemp;
     loadStr = loadStr.split(",$");
     
     if (loadStr.length <= 1) {
@@ -170,7 +185,7 @@ function loadData() {
         drawMain();
     } else {
         clearData();
-        for (i=0;i<loadStr.length;i+=2) {
+        for (var i=0;i<loadStr.length;i+=2) {
             data.notes[i/2] = loadStr[i];
             data.status[i/2] = loadStr[i+1]
         }
