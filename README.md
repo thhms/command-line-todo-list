@@ -7,6 +7,7 @@ So far, it offers the following commands:
 - 'prio #' : marks note number # as a priority (type again to mark as non-priority)
 - 'swap # #' : swaps the places of two notes
 - 'del #' : deletes note number #
+  - 'del done' : deletes alls notes with status done
 - 'clear' : clears the screen 
 - 'save' : stores data in input field for copy&paste
 - 'load ...' : loads data pasted from clipboard
